@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Exercice 3</title>
+  <style>
+    form, table { width: 90%; margin: 20px auto; }
+    input, select, button { margin: 5px; padding: 5px; }
+    table { border-collapse: collapse; }
+    th, td { border: 1px solid #999; padding: 6px; text-align: center; }
+    .error { color: red; text-align: center; }
+  </style>
+</head>
+<body>
+
+<form>
+  <input type="text" placeholder="Code étudiant" id="code">
+  <input type="text" placeholder="Nom" id="nom">
+  <input type="text" placeholder="Prénom" id="prenom">
+
+  <select id="semestre">
+    <option value="">-- Semestre --</option>
+    <option value="1">Semestre 1</option>
+    <option value="2">Semestre 2</option>
+  </select>
+
+  <div>
+    <input type="number" placeholder="Module 1" class="note">
+    <input type="number" placeholder="Module 2" class="note">
+    <input type="number" placeholder="Module 3" class="note">
+    <input type="number" placeholder="Module 4" class="note">
+    <input type="number" placeholder="Module 5" class="note">
+    <input type="number" placeholder="Module 6" class="note">
+  </div>
+
+  <button type="button" onclick="handleSubmit()">Ajouter</button>
+</form>
+
+<p class="error" id="error"></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Code</th><th>Nom</th><th>Prénom</th><th>Semestre</th>
+      <th>M1</th><th>M2</th><th>M3</th><th>M4</th><th>M5</th><th>M6</th>
+      <th>Moyenne</th><th>Décision</th>
+    </tr>
+  </thead>
+  <tbody id="tbody"></tbody>
+</table>
+
+<script>
+const handleSubmit = () => {
+  const error = document.getElementById("error");
+  error.textContent = "";
+
+  const code = codeInput.value.trim();
+  const nom = nomInput.value.trim();
+  const prenom = prenomInput.value.trim();
+  const semestre = document.getElementById("semestre").value;
+  const notesInputs = document.querySelectorAll(".note");
+
+  if (!code || !nom || !prenom || !semestre) {
+    error.textContent = "Tous les champs sont obligatoires.";
+    return;
+  }
+
+  let notes = [];
+  for (let input of notesInputs) {
+    const val = parseFloat(input.value);
+    if (isNaN(val)) {
+      error.textContent = "Toutes les notes doivent être numériques.";
+      return;
+    }
+    notes.push(val);
+  }
+
+  const moyenne = (notes.reduce((a, b) => a + b, 0) / notes.length).toFixed(2);
+
+  const modulesEliminatoires = notes.filter(n => n < 8).length;
+  const modulesNonValides = notes.filter(n => n < 12).length;
+
+  let decision = "Semestre non validé";
+  if (modulesEliminatoires === 0 && moyenne >= 12 && modulesNonValides < 3) {
+    decision = "Semestre validé";
+  }
+
+  const tr = document.createElement("tr");
+  tr.innerHTML = `
+    <td>${code}</td>
+    <td>${nom}</td>
+    <td>${prenom}</td>
+    <td>${semestre}</td>
+    ${notes.map(n => `<td>${n}</td>`).join("")}
+    <td>${moyenne}</td>
+    <td>${decision}</td>
+  `;
+
+  document.getElementById("tbody").appendChild(tr);
+  document.querySelector("form").reset();
+};
+
+const codeInput = document.getElementById("code");
+const nomInput = document.getElementById("nom");
+const prenomInput = document.getElementById("prenom");
+</script>
+
+</body>
+</html>

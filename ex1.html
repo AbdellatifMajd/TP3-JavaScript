@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Exercice1</title>
+  </head>
+  <body>
+    <style>
+      * {
+        font-size: 22px;
+        font-family: sans-serif;
+        padding: 0 15px;
+      }
+      form {
+        padding-bottom: 10px;
+        margin: auto;
+        margin-top: 50px;
+        width: 700px;
+        min-height: 50vh;
+        border: solid 1px;
+        box-shadow: 15px 5px 45px 3px rgb(213, 212, 212);
+      }
+      div {
+        width: 100%;
+        display: flex;
+        margin: 20px 0;
+      }
+      label {
+        width: 50%;
+      }
+      input,
+      select,
+      textarea {
+        width: 250px;
+        padding: 5px;
+      }
+      button {
+        cursor: pointer;
+        padding: 5px;
+        margin: 0 5px;
+        width: 200px;
+      }
+      .lastDiv {
+        position: relative;
+        right: 15px;
+        padding: 30px 0;
+        display: flex;
+        justify-content: center;
+      }
+    </style>
+
+    <form action="">
+      <div><label for="">Nom</label><input type="text" name="nom" /></div>
+      <div><label for="">Prénom</label><input type="text" name="prenom" /></div>
+      <div><label>Email</label><input type="email" name="email" /></div>
+      <div>
+        <label for="">Mot de passe</label
+        ><input type="password" name="password" />
+      </div>
+      <div>
+        <label for="">Réecrire le mot de passe</label
+        ><input type="password" name="confirmPassword" />
+      </div>
+      <div><label for="">Telephone</label><input type="tel" name="tel" /></div>
+      <div>
+        <label for="">Langue</label>
+        <select name="langues" id="">
+          <option value="Anglais">Anglais</option>
+          <option value="Francais">Français</option>
+          <option value="Arabe">Arabe</option>
+        </select>
+      </div>
+      <div>
+        <label for="">Commentaire</label>
+        <textarea rows="2" name="commentaire"></textarea>
+      </div>
+      <div class="lastDiv">
+        <button type="button" onclick="handleClick()">Valider</button>
+        <button>Annuler</button>
+      </div>
+    </form>
+
+<script>
+const handleClick = () => {
+  const form = document.querySelector("form");
+
+  // supprimer anciens messages / récap
+  document.querySelectorAll(".error, .recap").forEach(e => e.remove());
+
+  const formData = {
+    nom: document.querySelector("input[name='nom']")?.value,
+    prenom: document.querySelector("input[name='prenom']")?.value,
+    email: document.querySelector("input[name='email']")?.value,
+    password: document.querySelector("input[name='password']")?.value,
+    confirmPassword: document.querySelector("input[name='confirmPassword']")?.value,
+    tel: document.querySelector("input[name='tel']")?.value,
+    langues: document.querySelector("select[name='langues']")?.value,
+    commentaire: document.querySelector("textarea[name='commentaire']")?.value,
+  };
+
+  // validation : tous obligatoires
+  for (let key in formData) {
+    if (!formData[key]) {
+      const p = document.createElement("p");
+      p.textContent = "Tous les champs sont obligatoires !";
+      p.className = "error";
+      p.style.color = "red";
+      form.append(p);
+      return;
+    }
+  }
+
+  // récapitulatif
+  const recap = document.createElement("div");
+
+  recap.innerHTML = `
+    <h3>Récapitulatif</h3>
+    <p>Nom : ${formData.nom}</p>
+    <p>Prénom : ${formData.prenom}</p>
+    <p>Email : ${formData.email}</p>
+    <p>Téléphone : ${formData.tel}</p>
+    <p>Langue : ${formData.langues}</p>
+    <p>Commentaire : ${formData.commentaire}</p>
+  `;
+
+  form.after(recap);
+};
+</script>
+
+  </body>
+</html>

@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Exercice 2</title>
+  <style>
+    form { width: 400px; margin: 30px auto; }
+    input, button { width: 100%; margin: 8px 0; padding: 6px; }
+    .error { color: red; }
+    table { border-collapse: collapse; margin: 20px auto; }
+    td { border: 1px solid #999; padding: 8px; text-align: center; }
+  </style>
+</head>
+<body>
+
+<form>
+  <input type="text" placeholder="Dimension du tableau" name="dimension">
+  <input type="text" placeholder="Valeur minimale" name="min">
+  <input type="text" placeholder="Valeur maximale" name="max">
+  <button type="button" onclick="handleClick()">Générez un tableau</button>
+</form>
+
+<div id="resultat"></div>
+
+<script>
+const handleClick = () => {
+  const result = document.getElementById("resultat");
+  result.innerHTML = "";
+
+  const dimension = parseInt(document.querySelector("input[name='dimension']").value);
+  const min = parseInt(document.querySelector("input[name='min']").value);
+  const max = parseInt(document.querySelector("input[name='max']").value);
+
+  // validation
+  if (isNaN(dimension) || isNaN(min) || isNaN(max)) {
+    result.innerHTML = "<p class='error'>Tous les champs doivent être des entiers.</p>";
+    return;
+  }
+
+  if (min >= max) {
+    result.innerHTML = "<p class='error'>La valeur minimale doit être inférieure à la maximale.</p>";
+    return;
+  }
+
+  // création du tableau
+  const table = document.createElement("table");
+  let tr;
+
+  for (let i = 0; i < dimension; i++) {
+    if (i % 10 === 0) {
+      tr = document.createElement("tr");
+      table.appendChild(tr);
+    }
+
+    const td = document.createElement("td");
+    td.textContent = Math.floor(Math.random() * (max - min + 1)) + min;
+    tr.appendChild(td);
+  }
+
+  result.appendChild(table);
+};
+</script>
+
+</body>
+</html>
